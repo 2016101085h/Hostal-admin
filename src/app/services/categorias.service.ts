@@ -1,3 +1,4 @@
+import { environment } from './../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
@@ -6,7 +7,7 @@ import { map } from 'rxjs/operators';
 })
 export class CategoriasService {
 
-  public url = 'http://127.0.0.1:8000/api/categoria';
+  public url = `${environment.base_url}categoria`;
   constructor(private http: HttpClient) { }
 
   // tslint:disable-next-line: typedef

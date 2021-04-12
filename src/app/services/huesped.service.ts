@@ -1,3 +1,4 @@
+import { environment } from './../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
@@ -5,7 +6,7 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class HuespedService {
-  public url = 'http://127.0.0.1:8000/api/huesped';
+  public url = `${environment.base_url}huesped`;
   constructor(private http: HttpClient) { }
 
   // tslint:disable-next-line: typedef

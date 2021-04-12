@@ -1,3 +1,4 @@
+import { environment } from './../../environments/environment';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
@@ -6,7 +7,7 @@ import { map } from 'rxjs/operators';
 })
 export class ProductosService {
 
-  public url = 'http://127.0.0.1:8000/api/producto';
+  public url = `${environment.base_url}producto`;
   constructor(private http: HttpClient) { }
 
   // tslint:disable-next-line: typedef

@@ -24,7 +24,7 @@
   cursor: pointer;
   color: #fff;
 }
-input:disabled{
+input#valorImagen:disabled{
   background-color: transparent;
   cursor: not-allowed;
   border: none;

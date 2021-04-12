@@ -7,6 +7,8 @@ import { HabitacionService } from '../../services/habitacion.service';
 import { HuespedService } from '../../services/huesped.service';
 import { CategoriasService } from '../../services/categorias.service';
 import { ProductosService } from '../../services/productos.service';
+import { UsuarioService } from '../../services/usuario.service';
+import { ToastrService } from 'ngx-toastr';
 declare var $: any;
 @Component({
   selector: 'app-modal',
@@ -23,6 +25,8 @@ export class ModalComponent implements OnInit {
   numeroR: number;
   // tslint:disable-next-line: variable-name
   tipo_habitacion_idR = '0';
+  // tslint:disable-next-line: variable-name
+  rol_idR= '0';
   pisoR = '2';
   // tslint:disable-next-line: variable-name
   tipo_documentoR = '0';
@@ -38,9 +42,16 @@ export class ModalComponent implements OnInit {
   precio_ventaR: number;
   codigoR = '';
   stockR: number;
+  emailR = '';
+  passwordR = '';
+  password2R = '';
+  disable = false;
+  inputDisable = false;
+  validpass = false;
 
   arrayTipoHabitacion = [];
   arrayCategoria = [];
+  arrayRol = [];
   @Input() public accion = 'guardar';
   @Input() data;
   @Input() template;
@@ -55,9 +66,12 @@ export class ModalComponent implements OnInit {
               private hs: HabitacionService,
               private huesped: HuespedService,
               private categoria: CategoriasService,
-              private producto: ProductosService) {
+              private producto: ProductosService,
+              private us: UsuarioService,
+              private toast: ToastrService) {
                 this.getTipoHabitacion();
                 this.getCategoria();
+                this.getRoles();
     // this.rs.getRoles().subscribe((resp) => {
     //   console.log(resp);
     // });
@@ -74,7 +88,14 @@ export class ModalComponent implements OnInit {
   getCategoria() {
     this.categoria.getCategorias().subscribe((resp: any) => {
       this.arrayCategoria = resp.categoria;
-      console.log(this.arrayCategoria);
+      // console.log(this.arrayCategoria);
+    });
+  }
+  // tslint:disable-next-line: tsypedef
+  // tslint:disable-next-line: typedef
+  getRoles() {
+    this.rs.selectRol().subscribe((resp: any) => {
+      this.arrayRol = resp.rol;
     });
   }
   // tslint:disable-next-line: typedef
@@ -100,6 +121,13 @@ export class ModalComponent implements OnInit {
       this.precio_ventaR = this.generalData.precio_venta;
       this.stockR = this.generalData.stock;
       this.codigoR = this.generalData.codigo;
+      this.emailR = this.generalData.email;
+      this.rol_idR = this.generalData.rol_id;
+      this.disable = true;
+      this.inputDisable = true;
+      this.password2R = '';
+      this.passwordR = this.generalData.password;
+      this.password2R = this.generalData.password;
 
       // console.log(this.descripcionR);
     }else{
@@ -121,6 +149,10 @@ export class ModalComponent implements OnInit {
       this.precio_ventaR = 0;
       this.stockR = 0;
       this.codigoR = '';
+      this.emailR = '';
+      this.rol_idR = '0';
+      this.passwordR = '';
+      this.password2R = '';
     }
   }
   // tslint:disable-next-line: typedef
@@ -133,6 +165,7 @@ export class ModalComponent implements OnInit {
       timer: 1500
     });
   }
+  // tslint:disable-next-line: typedef
   // tslint:disable-next-line: typedef
   changeImagen() {
     // const btn_file = $('.btn-file');
@@ -213,7 +246,7 @@ export class ModalComponent implements OnInit {
       }
 
       this.ts.guardarTipoHabitacion(datoEnviar).subscribe((resp) => {
-      console.log('gaurdado');
+      // console.log('gaurdado');
       this.modalRef.hide();
       this.msgExitoso('guardado');
       // tslint:disable-next-line: no-shadowed-variable
@@ -430,4 +463,70 @@ nuevoProducto(producto) {
  }
 }
 
+// tslint:disable-next-line: typedef
+nuevoUsuario(usuario) {
+  console.log(usuario);
+  if (!usuario.valid){
+    return;
+  }
+  if (this.accion === 'actualizar'){
+    // console.log('actualizado');
+    // tslint:disable-next-line: max-line-length
+    // tslint:disable-next-line: radix
+    // tslint:disable-next-line: max-line-length
+    const rolUpdate = {...this.generalData, nombre: this.nombreR, email: this.emailR, celular: this.celularR, rol_id: parseInt(this.rol_idR), num_documento: this.num_documentoR, password: this.passwordR, imagen: this.imagenR};
+    console.log(rolUpdate);
+
+    this.us.actulizarUsuario(rolUpdate).subscribe((resp) => {
+      // console.log(resp);
+      this.modalRef.hide();
+      this.msgExitoso('actualizado');
+      this.us.getUsuarios().subscribe((respuesta) => {
+        this.DatoActualizado.emit(respuesta);
+
+      });
+      usuario.reset();
+    });
+    // console.log(this.generalData);
+  }
+
+  // console.log(rol.value);
+  if (this.accion === 'guardar'){
+    const datoEnviar = {
+      nombre : usuario.value.nombre,
+      num_documento: usuario.value.num_documento,
+      email: usuario.value.email,
+      password: usuario.value.password,
+      imagen: this.imagenR,
+      celular: usuario.value.celular,
+      // tslint:disable-next-line: radix
+      rol_id : parseInt(usuario.value.rol_id)
+    };
+    console.log(datoEnviar);
+
+    this.us.guardarUsuario(datoEnviar).subscribe((resp: any) => {
+      if (resp.msg){
+        this.toast.info(resp.msg);
+      }else{
+        console.log('gaurdado');
+        this.modalRef.hide();
+        this.msgExitoso('guardado');
+        // tslint:disable-next-line: no-shadowed-variable
+        this.us.getUsuarios().subscribe((respuesta: any) => {
+          this.DatoIngresado.emit(respuesta.usuario);
+        });
+        console.log(resp);
+        usuario.reset();
+    }
+  });
+ }
+}
+// tslint:disable-next-line: typedef
+validarContrasena(usuario){
+  if (usuario.value.password !== usuario.value.password2){
+    return true;
+  }else{
+    return false;
+  }
+}
 }
