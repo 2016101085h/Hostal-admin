@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  base_url: 'http://127.0.0.1:8000/api/'
+   base_url: 'https://morning-hamlet-19390.herokuapp.com/api/',
+  base: 'https://morning-hamlet-19390.herokuapp.com/'
 };
 
 /*

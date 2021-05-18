@@ -45,7 +45,7 @@
     </ngx-datatable-column>
     <ngx-datatable-column name="imagen" [flexGrow]="1">
       <ng-template  let-value="value" ngx-datatable-cell-template >
-       <img [src]="'http://127.0.0.1:8000/img/TipoHabitacion/'+value" class="img-fluid" alt="">
+       <img [src]="url+'img/TipoHabitacion/'+value" class="img-fluid" alt="">
       </ng-template>
     </ngx-datatable-column>
     <ngx-datatable-column name="opciones" [flexGrow]="3">

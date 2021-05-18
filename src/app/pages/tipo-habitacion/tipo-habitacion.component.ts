@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { environment } from 'src/environments/environment';
 import Swal from 'sweetalert2';
 import { TipoHabitacionService } from '../../services/tipo-habitacion.service';
 @Component({
@@ -9,6 +10,7 @@ import { TipoHabitacionService } from '../../services/tipo-habitacion.service';
 export class TipoHabitacionComponent {
 
     // tslint:disable-next-line: typedef
+    public url = environment.base;
     rows: any = [];
     temp = [];
     tipo: any = [];

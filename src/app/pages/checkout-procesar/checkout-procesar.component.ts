@@ -3,6 +3,7 @@ import { RecepcionService } from 'src/app/services/recepcion.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { VentasService } from '../../services/ventas.service';
 import Swal from 'sweetalert2';
+import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-checkout-procesar',
   templateUrl: './checkout-procesar.component.html',
@@ -10,6 +11,7 @@ import Swal from 'sweetalert2';
 })
 export class CheckoutProcesarComponent implements OnInit {
   // tslint:disable-next-line: variable-name
+  public url = environment.base;
   habitacion_id: number;
   costoHabitacion: any;
   arrayDataRecepcion: any;

@@ -3,13 +3,14 @@ import Swal from 'sweetalert2';
 import { ToastrService } from 'ngx-toastr';
 import { UsuarioService } from '../../services/usuario.service';
 import { AuthService } from '../../services/auth.service';
+import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-usuario',
   templateUrl: './usuario.component.html',
   styleUrls: ['./usuario.component.css']
 })
 export class UsuarioComponent implements OnInit {
-
+  public url = environment.base;
   rows: any = [];
   temp = [];
   users: any = [];
